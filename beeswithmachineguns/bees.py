@@ -212,7 +212,7 @@ def _attack(params):
             username=params['username'],
             key_filename=_get_pem_path(params['key_name']))
 
-        print 'Bee %i is firing her machine gun. Bang bang!' % params['i']
+        print 'Bee %i is firing her machine gun. FUUUUUCK YEAH!' % params['i']
 
         options = ''
         if params['headers'] is not '':
@@ -233,10 +233,11 @@ def _attack(params):
             os.system("scp -q -o 'StrictHostKeyChecking=no' -i %s %s %s@%s:/tmp/honeycomb" % (pem_file_path, params['post_file'], params['username'], params['instance_name']))
             options += ' -k -T "%(mime_type)s; charset=UTF-8" -p /tmp/honeycomb' % params
 
-
+    
         if params['cookies'] is not '':
-            options += ' -H \"Cookie: %ssessionid=NotARealSessionID;\"' % params['cookies']
+            options += ' -H \"Cookie: \"%s\";\"' % params['cookies']
         else:
+            print "NOPE"
             options += ' -C \"sessionid=NotARealSessionID\"'
 
         params['options'] = options
