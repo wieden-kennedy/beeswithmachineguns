@@ -219,7 +219,13 @@ def _attack(params):
             for h in params['headers'].split(';'):
                 if h != '':
                     options += ' -H "%s"' % h.strip()
+            if params['cookies'] is not '':
+                options += ' \"; Cookie: \"%s\";\"' % params['cookies']
+            else:
+                print "NOPE"
+                options += ' -C \"sessionid=NotARealSessionID\"'
 
+                
         stdin, stdout, stderr = client.exec_command('tempfile -s .csv')
         params['csv_filename'] = stdout.read().strip()
         if params['csv_filename']:
@@ -232,13 +238,7 @@ def _attack(params):
             pem_file_path=_get_pem_path(params['key_name'])
             os.system("scp -q -o 'StrictHostKeyChecking=no' -i %s %s %s@%s:/tmp/honeycomb" % (pem_file_path, params['post_file'], params['username'], params['instance_name']))
             options += ' -k -T "%(mime_type)s; charset=UTF-8" -p /tmp/honeycomb' % params
-
-    
-        if params['cookies'] is not '':
-            options += ' -H \"Cookie: \"%s\";\"' % params['cookies']
-        else:
-            print "NOPE"
-            options += ' -C \"sessionid=NotARealSessionID\"'
+       
 
         params['options'] = options
         benchmark_command = 'ab -r -n %(num_requests)s -c %(concurrent_requests)s %(options)s "%(url)s"' % params
