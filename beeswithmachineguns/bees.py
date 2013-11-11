@@ -145,7 +145,7 @@ def up(count, group, zone, image_id, instance_type, username, key_name, subnet):
 
         print 'Bee %s is ready for the attack.' % instance.id
 
-    ec2_connection.create_tags(instance_ids, { "Name": "a bee!" })
+    ec2_connection.create_tags(instance_ids, { "Name": "a bee!", "Role":"bee" })
 
     _write_server_list(username, key_name, zone, reservation.instances)
 
